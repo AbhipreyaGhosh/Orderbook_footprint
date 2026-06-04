@@ -1,32 +1,3 @@
-# import asyncio
-# import json
-# import websockets
-
-# async def orderbook():
-#     url = "wss://stream.binance.com:9443/ws/btcusdt@depth10@100ms"
-
-#     async with websockets.connect(url) as ws:
-#         print("Connected to Binance WebSocket")
-#         while True:
-#             data = await ws.recv()
-#             parsed = json.loads(data)
-
-#             bids = parsed['bids']  # [price, qty]
-#             asks = parsed['asks']
-
-#             print("\n--- Top 5 Bids ---")
-#             for price, qty in bids[:5]:
-#                 print(f"Bid: {price} Qty: {qty}")
-
-#             print("--- Top 5 Asks ---")
-#             for price, qty in asks[:5]:
-#                 print(f"Ask: {price} Qty: {qty}")
-
-#             await asyncio.sleep(0.1)  # limit printing rate
-
-# asyncio.run(orderbook())
-
-
 import asyncio
 import json
 import websockets
