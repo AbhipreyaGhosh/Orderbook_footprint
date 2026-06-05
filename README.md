@@ -1,1 +1,25 @@
 See what i understand is diagramatically , the book comes to me (10 levels deep at x ms) x is the latency. Then the actual trade data comes to me at yms (y nearly equal to x ). I calculate various other things at z ms . I dont know z , but can surely optimise z , because not dependent on external factors. Now when i place trade that is exactly after (x or y +z)ms . In actual trade this will increase again due to latency. So i calculate and enter till then 50% move is already done . If i enter at lower real trade confirmation and higher book confirmation i get spoofed and if i enter at higher book and wait for actual trade to come to higher values and enter then the trade is already completed and reversed as long as i enter . This is the problem i found out 
+Solution:
+        ┌──────────────────────────┐
+        │ Binance WebSocket Feed   │
+        └──────────┬───────────────┘
+                   │
+         (io_uring / epoll)
+                   │
+        ┌──────────▼──────────┐
+        │ Market Data Parser  │  (zero-copy if possible)
+        └──────────┬──────────┘
+                   │
+        ┌──────────▼──────────┐
+        │ Order Book Engine   │  (lock-free state)
+        └──────────┬──────────┘
+                   │
+        ┌──────────▼──────────┐
+        │ Strategy Engine     │  (event scoring)
+        └──────────┬──────────┘
+                   │
+        ┌──────────▼──────────┐
+        │ Execution Engine    │  (async send)
+        └──────────┬──────────┘
+                   │
+             Exchange API
